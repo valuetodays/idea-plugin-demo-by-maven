@@ -1,0 +1,147 @@
+<?xml version="1.0"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>cn.valuetodays</groupId>
+    <artifactId>idea-plugin-demo-by-maven</artifactId>
+    <version>1.0.0</version>
+    <packaging>jar</packaging>
+    <description>使用maven开发idea插件，本示例仅演示一个一级菜单+两个二级菜单</description>
+
+    <properties>
+        <encoding>UTF-8</encoding>
+        <java.version>1.8</java.version>
+        <project.build.sourceEncoding>${encoding}</project.build.sourceEncoding>
+
+        <!-- 这是idea安装目录下的lib目录的位置，请相应修改 -->
+        <idea.lib.dir>D:/Program Files/JetBrains/IntelliJ IDEA_2019.2.4/lib</idea.lib.dir>
+        <!-- 这是idea配置目录下的plugins-sandbox目录的位置，请相应修改-->
+        <sandbox.plugins.dir>C:/Users/Administrator/.IntelliJIdea2019.2/system/plugins-sandbox/plugins</sandbox.plugins.dir>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.jetbrains</groupId>
+            <artifactId>platform-api</artifactId>
+            <version>1.0</version>
+            <scope>system</scope>
+            <systemPath>${idea.lib.dir}/platform-api.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>org.jetbrains</groupId>
+            <artifactId>annotations</artifactId>
+            <version>1.0</version>
+            <scope>system</scope>
+            <systemPath>${idea.lib.dir}/annotations.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>org.jetbrains</groupId>
+            <artifactId>platform-util-ui</artifactId>
+            <version>1.0</version>
+            <scope>system</scope>
+            <systemPath>${idea.lib.dir}/platform-util-ui.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>org.jetbrains</groupId>
+            <artifactId>util</artifactId>
+            <version>1.0</version>
+            <scope>system</scope>
+            <systemPath>${idea.lib.dir}/util.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>org.jetbrains</groupId>
+            <artifactId>platform-core-ui</artifactId>
+            <version>1.0</version>
+            <scope>system</scope>
+            <systemPath>${idea.lib.dir}/platform-core-ui.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>org.jetbrains</groupId>
+            <artifactId>platform-impl</artifactId>
+            <version>1.0</version>
+            <scope>system</scope>
+            <systemPath>${idea.lib.dir}/platform-impl.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>org.jetbrains</groupId>
+            <artifactId>extensions</artifactId>
+            <version>1.0</version>
+            <scope>system</scope>
+            <systemPath>${idea.lib.dir}/extensions.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>org.jetbrains</groupId>
+            <artifactId>intellij-xml</artifactId>
+            <version>1.0</version>
+            <scope>system</scope>
+            <systemPath>${idea.lib.dir}/intellij-xml.jar</systemPath>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <finalName>${artifactId}</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>3.1.0</version>
+                <configuration>
+                    <appendAssemblyId>false</appendAssemblyId>
+                    <descriptors>
+                        <descriptor>assembly.xml</descriptor>
+                    </descriptors>
+                    <outputDirectory>${project.build.directory}/dist</outputDirectory>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>make-assembly</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>1.1</version>
+                <executions>
+                    <execution>
+                        <id>copy-file-to-sandbox-plugins-dir</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <tasks>
+                                <echo>
+                                    delete dir [${sandbox.plugins.dir}/${artifactId}]
+                                    and copy new dir from ${project.build.directory}/dist/${artifactId} to ${sandbox.plugins.dir}
+                                </echo>
+                                <delete includeEmptyDirs="true" failonerror="false">
+                                    <fileset dir="${sandbox.plugins.dir}/${artifactId}"/>
+                                </delete>
+                                <copy todir="${sandbox.plugins.dir}" overwrite="true">
+                                    <fileset dir="${project.build.directory}/dist/${artifactId}"/>
+                                </copy>
+                            </tasks>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
+                <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                    <encoding>${encoding}</encoding>
+                    <parameters>true</parameters>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>

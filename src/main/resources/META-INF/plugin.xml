@@ -1,0 +1,50 @@
+<idea-plugin>
+    <id>cn.valuetodays.idea.plugin.demo</id>
+    <name>demo插件</name>
+    <version>1.0.0</version>
+    <vendor email="xxx@qq.com" url="http://www.xxx.cn">refresher</vendor>
+
+    <description><![CDATA[
+        使用maven开发idea插件（示例工程）
+        。。。。。。。。。。。。。
+        。。。。。。。。。。。。
+        。。。。。。。。。。。。（需要有40字）
+    ]]></description>
+
+    <change-notes><![CDATA[
+      变更日志.<br>
+      <em>1.0.0 第一个版本。。。。。。。。。。。。。。。。。。</em>
+      <em>。。。。。。。。。。。。。。。。。。。。。。。。。。</em>
+    ]]>
+    </change-notes>
+
+    <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
+    <idea-version since-build="173.0"/>
+
+    <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
+         on how to target different products -->
+    <!-- uncomment to enable plugin in all products
+    <depends>com.intellij.modules.lang</depends>
+    -->
+
+    <extensions defaultExtensionNs="com.intellij">
+    </extensions>
+
+    <actions>
+        <action id="Action_NotifyluginAction"
+                text="测试通知" description="测试通知的描述"
+                class="cn.valuetodays.idea.plugin.demo.action.NotifyluginAction">
+        </action>
+        <action class="cn.valuetodays.idea.plugin.demo.action.VisitOfficialWebAction"
+                text="访问官网"
+                id="Action_VisitOfficialWebAction">
+        </action>
+        <group popup="true"
+               id="cn.valuetodays.idea.plugin.demo.action_group" text="测试父菜单">
+            <reference ref="Action_NotifyluginAction"/>
+            <reference ref="Action_VisitOfficialWebAction"/>
+            <add-to-group group-id="ToolsMenu" anchor="last"/>
+        </group>
+    </actions>
+
+</idea-plugin>
